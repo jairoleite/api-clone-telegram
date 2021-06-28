@@ -1,0 +1,57 @@
+{"properties": [
+  {
+    "name": "socketio.host",
+    "type": "java.lang.String",
+    "description": "A description for 'socketio.host'"
+  },
+  {
+    "name": "socketio.port",
+    "type": "java.lang.String",
+    "description": "A description for 'socketio.port'"
+  },
+  {
+    "name": "socketio.maxFramePayloadLength",
+    "type": "java.lang.String",
+    "description": "A description for 'socketio.maxFramePayloadLength'"
+  },
+  {
+    "name": "socketio.maxHttpContentLength",
+    "type": "java.lang.String",
+    "description": "A description for 'socketio.maxHttpContentLength'"
+  },
+  {
+    "name": "socketio.bossCount",
+    "type": "java.lang.String",
+    "description": "A description for 'socketio.bossCount'"
+  },
+  {
+    "name": "socketio.workCount",
+    "type": "java.lang.String",
+    "description": "A description for 'socketio.workCount'"
+  },
+  {
+    "name": "socketio.allowCustomRequests",
+    "type": "java.lang.String",
+    "description": "A description for 'socketio.allowCustomRequests'"
+  },
+  {
+    "name": "socketio.allowCustomRequests",
+    "type": "java.lang.String",
+    "description": "A description for 'socketio.allowCustomRequests'"
+  },
+  {
+    "name": "socketio.pingTimeout",
+    "type": "java.lang.String",
+    "description": "A description for 'socketio.pingTimeout'"
+  },
+  {
+    "name": "socketio.upgradeTimeout",
+    "type": "java.lang.String",
+    "description": "A description for 'socketio.upgradeTimeout'"
+  },
+  {
+    "name": "socketio.pingInterval",
+    "type": "java.lang.String",
+    "description": "A description for 'socketio.pingInterval'"
+  }
+]}
