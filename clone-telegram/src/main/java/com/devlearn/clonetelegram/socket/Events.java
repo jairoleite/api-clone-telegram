@@ -11,7 +11,9 @@ import org.springframework.stereotype.Service;
 import com.alibaba.fastjson.JSONArray;
 import com.corundumstudio.socketio.SocketIOClient;
 import com.corundumstudio.socketio.SocketIOServer;
-import com.devlearn.clonetelegram.socket.model.Chat;
+import com.devlearn.clonetelegram.entities.Message;
+import com.devlearn.clonetelegram.services.MessageService;
+import com.devlearn.clonetelegram.services.UserService;
 import com.devlearn.clonetelegram.socket.model.User;
 
 @Service
@@ -20,6 +22,11 @@ public class Events {
 	@Qualifier("mapUsers")
 	@Autowired
 	private Map<String, User> mapUsers;
+	
+	@Autowired
+	private UserService userService;
+	@Autowired
+	private MessageService messageService;
 	
 		
 	public void makeEvents(SocketIOServer server) {
@@ -32,9 +39,9 @@ public class Events {
 			if(user == null) {
 				user = new User(data.getUuid(), data.getName(), data.getImage(), data.getOnline());
 				
+				//adiciona na memória
 				mapUsers.put(data.getUuid(), user);
 				System.out.println(user.toString());
-				
 				System.out.println("usuário adiciona...");
 			}
 			else {
@@ -43,6 +50,8 @@ public class Events {
 				System.out.println("usuário atualizado...");
 			}
 			
+			//adiciona no banco
+			userService.saveUser(data.getUuid(), data.getName(), data.getImage(), data.getOnline());
 			
 			//atualiza todos os usuários com listagem novas
 			JSONArray array = new JSONArray();
@@ -62,9 +71,11 @@ public class Events {
             User user = mapUsers.get(uid);
             if (uid != null) {
             	client.disconnect();
-            	
+            	//set offline na memória
             	user.setOnline(false);
             	mapUsers.put(user.getUuid(), user);
+            	//set offline no banco
+            	userService.verifyOnline(user.getUuid(), false);
             	
             	JSONArray array = new JSONArray();
             	for (Entry<String, User> mapKey: mapUsers.entrySet()) {
@@ -76,14 +87,12 @@ public class Events {
             
         });
 		
-		server.addEventListener(EnumEvents.SEND_MESSAGE.toString(), Chat.class, (client, data, ackRequest) -> {
-			server.getBroadcastOperations().sendEvent(EnumEvents.SEND_MESSAGE.toString(), data);
+		server.addEventListener(EnumEvents.SEND_MESSAGE.toString(), Message.class, (client, data, ackRequest) -> {
+			//salva no banco
+			messageService.saveMessage(data);
+			//emite evento
+			client.sendEvent(EnumEvents.RECEIVE_MESSAGE.toString()+"-"+data.getUserUuid(), data);
 		});	
-	
-		server.addEventListener(EnumEvents.SEND_MESSAGE.toString(), Chat.class, (client, data, ackRequest) -> {
-			server.getBroadcastOperations().sendEvent(EnumEvents.SEND_MESSAGE.toString(), data);
-		});		
-		
 	}
 	
 	private String getParamsByClient(SocketIOClient client) {
