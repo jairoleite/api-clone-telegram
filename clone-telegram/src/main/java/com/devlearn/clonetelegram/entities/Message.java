@@ -1,6 +1,6 @@
 package com.devlearn.clonetelegram.entities;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,11 +9,12 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Table(name = "tb_message")
-@Getter @Setter
+@Getter @Setter @NoArgsConstructor
 public class Message {
 
 	@Id
@@ -22,6 +23,16 @@ public class Message {
 	
 	private String text;
 	private Boolean view;
-	private LocalDateTime registryDate;
+	private Instant registryDate;
 	private String userUuid;
+	private String userSendUuid;
+	
+	public Message(String text, Instant registryDate, String userUuid, String userSendUuid) {
+		this.text = text;
+		this.registryDate = registryDate;
+		this.userUuid = userUuid;
+		this.userSendUuid = userSendUuid;
+	}
+	
+	
 }

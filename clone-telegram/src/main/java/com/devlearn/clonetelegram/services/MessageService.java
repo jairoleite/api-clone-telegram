@@ -1,8 +1,6 @@
 package com.devlearn.clonetelegram.services;
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.time.Instant;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,13 +16,9 @@ public class MessageService {
 	@Autowired
 	private MessageRepository messageRepository;
 	
-	public List<MessageDTO> listMessage(String uuid) {
-		return messageRepository.listByUserUuid(uuid).stream().map(m -> new MessageDTO(m)).collect(Collectors.toList());
-	}
-	
 	@Transactional
-	public void saveMessage(Message message) {
-		message.setRegistryDate(LocalDateTime.now());
+	public void saveMessage(MessageDTO dto) {
+		Message message = new Message(dto.getText(), Instant.now(), dto.getUserUuid(), dto.getUserSendUuid());
 		messageRepository.save(message);
 	}
 }

@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import com.alibaba.fastjson.JSONArray;
 import com.corundumstudio.socketio.SocketIOClient;
 import com.corundumstudio.socketio.SocketIOServer;
-import com.devlearn.clonetelegram.entities.Message;
+import com.devlearn.clonetelegram.dtos.MessageDTO;
 import com.devlearn.clonetelegram.services.MessageService;
 import com.devlearn.clonetelegram.services.UserService;
 import com.devlearn.clonetelegram.socket.model.User;
@@ -87,11 +87,12 @@ public class Events {
             
         });
 		
-		server.addEventListener(EnumEvents.SEND_MESSAGE.toString(), Message.class, (client, data, ackRequest) -> {
+		server.addEventListener(EnumEvents.SEND_MESSAGE.toString(), MessageDTO.class, (client, data, ackRequest) -> {
+			System.out.println("enviado mensagem" + data.toString());
 			//salva no banco
 			messageService.saveMessage(data);
 			//emite evento
-			client.sendEvent(EnumEvents.RECEIVE_MESSAGE.toString()+"-"+data.getUserUuid(), data);
+			server.getBroadcastOperations().sendEvent(EnumEvents.RECEIVE_MESSAGE.toString()+"-"+data.getUserSendUuid(), data);
 		});	
 	}
 	

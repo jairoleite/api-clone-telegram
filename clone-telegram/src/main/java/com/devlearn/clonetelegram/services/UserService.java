@@ -13,42 +13,47 @@ import com.devlearn.clonetelegram.repositories.UserRepository;
 
 @Service
 public class UserService {
-	
+
 	@Autowired
 	private UserRepository userRepository;
-	
+
 	@Transactional(readOnly = true)
-	public List<UserDTO> listAll() {
-		return userRepository.findAll().stream().map(u -> new UserDTO(u)).collect(Collectors.toList());
+	public List<UserDTO> listAll(String notIncludeUser) {
+		return userRepository.listAllNotInName(notIncludeUser).stream().map(u -> new UserDTO(u)).collect(Collectors.toList());
 	}
-	
+
 	@Transactional(readOnly = true)
 	public UserDTO getUserByName(String name) {
 		User user = userRepository.findByName(name);
-		
+
 		if(user == null) {
 			return null;
 		}
-		
+
 		return new UserDTO(user);
 	}
 
 	@Transactional
 	public User saveUser(String uuid, String name, String image, Boolean online) {
-		
+
 		User user = userRepository.getByUuid(uuid);
 		if(user == null) {
 			user = new User(uuid, name, image, online);
 		}
-		
+
 		user.setOnline(online);
 		user = userRepository.save(user);
 		return user;
 	}
-	
+
 	@Transactional
 	public void verifyOnline(String uuid, Boolean online) {
 		User user = userRepository.getByUuid(uuid);
+
+		if(user == null) {
+			return;	
+		}
+
 		user.setOnline(online);
 		userRepository.save(user);
 	}

@@ -9,18 +9,18 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.devlearn.clonetelegram.dtos.MessageDTO;
-import com.devlearn.clonetelegram.services.MessageService;
+import com.devlearn.clonetelegram.repositories.MessageRepository;
+import com.devlearn.clonetelegram.repositories.interfaces.MessageInterface;
 
 @RestController
 @RequestMapping("messages")
 public class MessageResource {
 
 	@Autowired
-	private MessageService messageService;
+	private MessageRepository messageRepository;
 	
-	@GetMapping("/{uuid}")
-	public ResponseEntity<List<MessageDTO>> listByUserUuid(@PathVariable String uuid) {
-		return ResponseEntity.ok(messageService.listMessage(uuid));
+	@GetMapping("/{uuid}/{userSendUuid}")
+	public ResponseEntity<List<MessageInterface>> listByUserUuid(@PathVariable String uuid, @PathVariable String userSendUuid) {
+		return ResponseEntity.ok(messageRepository.listByUserUuid(uuid));
 	}
 }

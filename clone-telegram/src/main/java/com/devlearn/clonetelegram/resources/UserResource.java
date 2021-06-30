@@ -19,9 +19,9 @@ public class UserResource {
 	@Autowired
 	private UserService userService;
 	
-	@GetMapping
-	public ResponseEntity<List<UserDTO>> listAll() {
-		return ResponseEntity.ok(userService.listAll());
+	@GetMapping("/all")
+	public ResponseEntity<List<UserDTO>> listAll(@RequestParam(value = "name") String name) {
+		return ResponseEntity.ok(userService.listAll(name));
 	}
 	
 	@GetMapping("/byname")
