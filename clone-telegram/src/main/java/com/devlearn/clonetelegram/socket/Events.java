@@ -91,8 +91,10 @@ public class Events {
 			System.out.println("enviado mensagem" + data.toString());
 			//salva no banco
 			messageService.saveMessage(data);
-			//emite evento
+			//emite evento para quem vai a mensagem
 			server.getBroadcastOperations().sendEvent(EnumEvents.RECEIVE_MESSAGE.toString()+"-"+data.getUserSendUuid(), data);
+			//emite evento para quem enviou
+			server.getBroadcastOperations().sendEvent(EnumEvents.FROM_MESSAGE.toString()+"-"+data.getUserUuid(), data);
 		});	
 	}
 	
